@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://unpkg.com/css.gg@2.0.0/icons/css/check.css' rel='stylesheet'>
+    <link href='https://unpkg.com/css.gg@2.0.0/icons/css/chevron-right.css' rel='stylesheet'
+    <title>Student Search</title>
+    <style>
+        body {
+            background-color: #eeeade;
+            margin: 0;
+            padding: 0;
+            height: 200vh; /* Ensure the body has a height to overflow */
+        }
+
+        .sidebar {
+            height: 100vh;
+            width: 120px;
+            position: fixed;
+            left: 0;
+            top: 0;
+            padding-top: 40px;
+            background-color: #c6b175;
+        }
+
+        h1 {
+            color: #081010;
+            font-family: "Century Gothic", sans-serif;
+            font-weight: 100;
+            letter-spacing: 1px;
+            font-size: 40px;
+            margin-top: 200px;
+            margin-left: 40px;
+            margin-bottom: 70px;
+            text-align: center;
+        }
+
+        p {
+            font-family: "Century Gothic", sans-serif;
+            font-size: 18px;
+            font-variant: normal;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        .querytype {
+            display: flex;
+            justify-content: flex-start;
+            margin-left: 300px;
+            margin-bottom: 50px;
+            margin-right: 100px;
+        }
+
+        .accombox, .altreq, .jamw, .divis { /*RESPONSIVE - press btn*/
+            width: 480px;
+            height: 40px;
+            background-color: #081010;
+            border-radius: 15px;
+            color: #eeeade;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            margin-right: 25px;
+            margin-bottom: 20px;
+        }
+
+        .accombox, .jamw, .divis {
+            background-color: #3a7c7f;
+        }
+
+        .togglebtn {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+            margin-left: 60px;
+            margin-top: 20px;
+        }
+
+        .bulk, .unit {
+            text-align: center;
+            font-family: "Century Gothic", sans-serif;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .bulk {
+            opacity: 0.4;
+        }
+
+        .toggle { /*RESPONSIVE - press to switch seach type*/
+            width: 70px;
+            height: 30px;
+            background-color: #081010;
+            border-radius: 25px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+        }
+
+        .circle {
+            width: 20px;
+            height: 20px;
+            background-color: #eeeade;
+            border-radius: 50%;
+            position: absolute;
+            left: 45px;
+            top: 5px;
+        }
+
+        .searchbar {
+            width: 80%;
+            height: 40px;
+            background-color: #eeeade;
+            border-color: #081010;
+            border-style: solid;
+            border-width: 2px;
+            border-radius: 25px;
+            display: flex;
+            margin-left: 300px;
+            margin-right: auto;
+            margin-top: 50px;
+            align-items: center;
+            text-align: center;
+            position: relative;
+        }
+
+       .searchbar input { /*Responsive Text - Text Input*/
+           width: 100%;
+           height: 100%;
+           background-color: transparent; 
+           border: none;
+           outline: none;
+           padding-left: 15px;
+           font-family: "Century Gothic", sans-serif;
+           font-size: 18px;
+           color: #081010;
+       }
+
+        .scrollbar {
+            overflow-y: auto;
+            scrollbar-color: #081010 #eeeade;
+            scrollbar-width: thick;
+            height: 100px;
+        }
+
+        .scrollbar::-webkit-scrollbar {
+            width: 20px;
+        }
+
+        .scrollbar::-webkit-scrollbar-thumb {
+            background-color: #081010;
+            border-radius: 10px;
+            border: 5px solid #081010;
+        }
+
+        .scrollbar::-webkit-scrollbar-track {
+            background-color: #eeeade;
+            border-radius: 10px;
+            border: 5px solid #081010;
+        }
+
+        .semester {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+            margin-left: 35px;
+            margin-top: 35px;
+            flex-direction: row;
+        }
+
+        .termbx, .yearbx {
+            background-color: #eeeade;
+            border-style: solid #081010;
+            border-radius: 10px;
+            border-color: #081010;
+            border-style: solid;
+            border-width: 2px;
+            color: #081010;
+            width: 170px;
+            height: 20px;
+            padding: 5px;
+            justify-content: space-between;
+            align-items: center;
+            text-align: center;
+            display: flex;
+        }
+
+        .term, .year {
+            text-align: center;
+            font-family: "Century Gothic", sans-serif;
+            font-size: 17px;
+            font-weight: 500;
+            justify-content: center;
+        }
+
+        .arrowleft { /*RESPONSIVE - press arrow to navigate term or year*/
+            width: 0;
+            height: 0;
+            border-top: 8px solid transparent;
+            border-right:7px solid #081010;
+            border-bottom: 8px solid transparent;
+            margin-left: 5px;
+            
+        }
+
+        .arrowright { /*RESPONSIVE - press arrow to navigate term or year*/
+            width: 0;
+            height: 0;
+            border-top: 8px solid transparent;
+            border-left: 7px solid #081010;
+            border-bottom: 8px solid transparent;
+            margin-right: 5px;
+        }
+
+        .values {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 50px;
+            margin-left: auto;
+            margin-right: auto;
+            margin-bottom: 50px;
+            margin-top: 100px;
+        }
+
+        .txtbk, .conver {
+            width: 250px;
+            height: 25px;
+            background-color: #081010;
+            color: #eeeade;
+            border-radius: 15px;
+            text-align: center;
+            padding: 8px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .txtbk p, .conver p {
+            margin: 0;
+            padding: 0;
+        }
+
+        .arrow {
+            width: 0px;
+            height: 0px;
+            border-top: 8px solid transparent;
+            border-left: 10px solid #eeeade;
+            border-bottom: 8px solid transparent;
+            position: relative;
+            margin-left: 10px;
+        }
+
+        .btmborder {
+            background-color: #081010;
+            width: 80%;
+            height: 3px;
+            margin-top: 200px;
+            margin-left: 300px;
+            margin-right: auto;
+        }
+
+        .bgbox {
+            width: 50%;
+            height: 500px;
+            background-color: rgba(198, 177, 117, 0.5);
+            border-radius: 30px;
+            padding: 50px;
+            margin-left: 600px;
+            margin-right: 700px;
+            margin-top: 100px;
+            justify-content:center;
+            display:flex;
+            align-content: center;
+
+        }
+
+        .profwrap {
+            display: flex;
+            flex-direction: row;
+        }
+
+        .profiles {
+            height: 450px;
+            width: 300px;
+            background-color: #3a7c7f;
+            border-radius: 40px;
+            margin: 20px;
+            padding-left: 15px;
+            box-shadow: -6px 1px 1px rgba(8, 16, 16, 0.7);
+        }
+
+        .topsec {
+            display: flex;
+            align-items: flex-start;
+            margin-left: 5px;
+            padding-top: 50px;
+        }
+
+        .btmsec {
+            display:inline-block;
+            align-items: flex-start;
+            text-align: start;
+            padding-left: 10px;
+            padding-top: 10px;
+            position: relative;
+            flex-direction: column;
+            position: absolute;
+        }
+
+        .majorbx{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .major {
+            height: 20px;
+            width: 50px;
+            background-color: #081010;
+            text-align: center;
+            justify-content: center;
+            align-items: center;
+            display: flex;
+            border-radius: 5px;
+            padding: 2px;
+            margin-left: 10px;
+        }
+
+        .statusbtn, .requestbtn {
+            height: 27px;
+            background-color: #eeeade;
+            border-radius: 5px;
+            display: flex;
+            align-items: center; 
+            justify-content: space-between;
+            padding: 0 10px;
+            margin-bottom: 10px;
+            position: relative;
+        }
+
+        .statusbtn {
+            width: 90px;
+            margin-top: 20px;
+        }
+
+        .gg-check {
+        box-sizing: border-box;
+        position: relative;
+        display: block;
+        transform: scale(var(--ggs,0.9));
+        width: 22px;
+        height: 22px;
+        border: 2px solid transparent;
+        border-radius: 50%;
+        color:#eeeade;
+        }
+
+        .gg-check::after {
+        content: "";
+        display: block;
+        box-sizing: border-box;
+        position: absolute;
+        left: 1px;
+        right: 1px;
+        width: 6px;
+        height: 10px;
+        border-width: 0 2px 2px 0;
+        border-style: solid;
+        transform-origin: bottom left;
+        transform: translate(-15%) rotate(45deg);
+        } 
+
+        .requestbtn {
+            width: 130px;
+        }
+
+        .checkbox {
+            height: 15px;
+            width: 15px;
+            background-color: #081010;
+            border-radius: 3px;
+            margin-left: auto;
+            justify-content: center;
+            align-items: center;
+            display: flex;
+            padding: 2px;
+        }
+
+        .pendingbx {
+            height: 15px;
+            width: auto;
+            background-color: #081010;
+            border-radius: 3px;
+            margin-left: auto;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            padding: 2px;
+        }
+
+        .pendingbx {
+            flex-direction: row;
+        }
+
+        .pendingdot {
+            height: 3px;
+            width: 3px;
+            background-color: #eeeade;
+            border-radius: 50%;
+            margin: 0 1px; 
+        }
+
+        .profilefooter {
+            display:flex;
+            height: 50px;
+            width: 100%;
+            align-items:center;
+            justify-content: center;
+            margin-top: 212px;
+            padding-left: 30px;
+            flex-direction: row;
+        }
+
+        .viewprofile { /*RESPONSIVE - takes you to student's full profile*/
+            font-family: "Century Gothic", sans-serif;
+            font-size: 25px;
+            font-variant: normal;
+            font-weight: 500;
+            letter-spacing: 1px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            color:rgba(238, 234, 222, 0.5);
+        }
+
+        .gg-chevron-right {
+            box-sizing: border-box;
+            position: relative;
+            display: block;
+            transform: scale(var(--ggs,1));
+            width: 22px;
+            height: 22px;
+            border: 2px solid transparent;
+            border-radius: 100px;
+            color:rgba(238, 234, 222, 0.5);
+            margin-left:5px;
+        }
+
+        .gg-chevron-right::after {
+            content: "";
+            display: block;
+            box-sizing: border-box;
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-bottom: 2px solid;
+            border-right: 2px solid;
+            transform:rotate(-45deg);
+            right: 6px;
+            top: 1px;
+            color:rgba(238, 234, 222, 0.5);
+        } 
+
+        .stu-gen {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .pfp {
+            height: 100px;
+            width: 100px;
+            border-radius: 50px;
+            background-color: #eeeade;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 15px;
+        }
+
+        .pfptxt {
+            font-family: "Century Gothic", sans-serif;
+            font-size: 50px;
+            font-variant: normal;
+            font-weight: bold;
+            letter-spacing: 1px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+        }
+
+        .name-head {
+            font-family: "Century Gothic", sans-serif;
+            font-size: 22px;
+            font-variant: normal;
+            font-weight: 600;
+            letter-spacing: 1px;
+            display: flex;
+            flex-direction: column;
+            color: #eeeade;
+            margin-top: 10px;
+            margin-bottom: 5px;
+            line-height: 1.5; 
+        }
+
+        .first-name, .last-name {
+            display: block;
+            margin: 0; 
+            padding: 0; 
+        }
+
+        .bodytxt1 {
+            font-family: "Century Gothic", sans-serif;
+            font-size: 16px;
+            font-variant: normal;
+            font-weight: 200;
+            letter-spacing: 1px;
+            display: flex;
+            color: #eeeade;
+            line-height: 0.01;
+        }
+
+        .bodytxt2 {
+            font-family: "Century Gothic", sans-serif;
+            font-size: 13px;
+            font-variant: normal;
+            font-weight: 200;
+            letter-spacing: 1px;
+            display: flex;
+            color: #eeeade;
+            line-height: 1.5;
+        }
+
+        .majortxt {
+            font-family: "Century Gothic", sans-serif;
+            font-size: 16px;
+            font-variant: normal;
+            font-weight: 400;
+            letter-spacing: 1px;
+            display: flex;
+            color: #eeeade;
+        }
+
+        .bodytxt3 {
+            font-family: "Century Gothic", sans-serif;
+            font-size: 11px;
+            font-variant: normal;
+            font-weight: 300;
+            letter-spacing: 1px;
+            display: flex;
+            color:#081010;
+            line-height: 1.5;
+}
+    </style>
+</head>
+<body>
+
+<div class="sidebar"></div>
+
+<h1>DISABILITY AND ACCESS SERVICES</h1>
+
+<div class="querytype">
+    <div class="accombox">
+        <p>Accommodations</p>
+    </div>
+    <div class="altreq">
+        <p>Alt Requests</p>
+    </div>
+    <div class="jamw">
+        <p>Jamworks</p>
+    </div>
+    <div class="divis">
+        <p>Division</p>
+    </div>
+</div>
+
+<div class="togglebtn">
+    <p class="bulk">Bulk</p>
+    <div class="toggle">
+        <div class="circle"></div>
+    </div>
+    <p class="unit">Unit</p>
+</div>
+
+<div class="searchbar">
+    <input type="text" id="searchbar" name="searchbar">
+</div>
+
+<div class="semester">
+    <div class="termbx">
+        <div class="arrowleft"></div>
+        <p class="term"> Spring</p>
+        <div class="arrowright"></div>
+    </div>
+    <div class="yearbx">
+        <div class="arrowleft"></div>
+        <p class="year"> 2024</p>
+        <div class="arrowright"></div>
+    </div>
+</div>
+
+<div class="btmborder"></div>
+
+<div class="bgbox">
+    <div class="profwrap">
+        <div class="profiles">
+            <div class="topsec">
+                <div class="pfp">
+                    <p class="pfptxt">LN</p>
+                </div>
+                <div class="stu-gen">
+                    <div class="name-head">
+                        <p class="first-name">Laura</p>
+                        <p class="last-name">Ndikumana</p>
+                    </div>
+                    <p class="bodytxt1">SID:1234567</p>
+                    <p class="bodytxt1">she/her</p>
+                </div>
+            </div>
+            <div class="btmsec">
+                <p class="bodytxt2">
+                    Undergraduate
+                </p>
+                <p class="bodytxt2">
+                    Digital Communication <span class="major">CAS</span>
+                </p>
+                <p class="bodytxt2">
+                    Available: Mon & Wed (12pm - 3pm)
+                </p>
+            <div class="statusbtn">
+                <p class="bodytxt3">
+                    Active
+                </p>
+                <div class="checkbox">
+                    <i class="gg-check"></i>
+                </div>
+            </div>
+            <div class="requestbtn">
+                <p class="bodytxt3">
+                    New Requests
+                </p>
+                <div class="pendingbx">
+                    <div class="pendingdot"></div>
+                    <div class="pendingdot"></div>
+                    <div class="pendingdot"></div>
+                </div>
+            </div>
+            </div>
+            <div class="profilefooter">
+                <p class="viewprofile">
+                    View Profile
+                <i class="gg-chevron-right"></i>
+                </p>
+            </div>
+        </div>
+        <div class="profiles">
+            <div class="topsec">
+                <div class="pfp">
+                    <p class="pfptxt">ES</p>
+                </div>
+                <div class="stu-gen">
+                    <div class="name-head">
+                        <p class="first-name">Eli</p>
+                        <p class="last-name">Sauerwalt</p>
+                    </div>
+                    <p class="bodytxt1">SID:7654321</p>
+                    <p class="bodytxt1">he/him</p>
+                </div>
+            </div>
+            <div class="btmsec">
+                <p class="bodytxt2">
+                    Undergraduate
+                </p>
+                <p class="bodytxt2">
+                    Information Systems <span class="major">MSB</span>
+                </p>
+                <p class="bodytxt2">
+                    Available: Tues & Wed (11am - 4pm)
+                </p>
+            <div class="statusbtn">
+                <p class="bodytxt3">
+                    Active
+                </p>
+                <div class="checkbox">
+                    <i class="gg-check"></i>
+                </div>
+            </div>
+            <div class="requestbtn">
+                <p class="bodytxt3">
+                    No New Requests
+                </p>
+                <div class="pendingbx">
+                    <div class="pendingdot"></div>
+                    <div class="pendingdot"></div>
+                    <div class="pendingdot"></div>
+                </div>
+            </div>
+            </div>
+            <div class="profilefooter">
+                <p class="viewprofile">
+                    View Profile
+                <i class="gg-chevron-right"></i>
+                </p>
+            </div>
+        </div>
+        <div class="profiles">
+            <div class="topsec">
+                <div class="pfp">
+                    <p class="pfptxt">AD</p>
+                </div>
+                <div class="stu-gen">
+                    <div class="name-head">
+                        <p class="first-name">Ayla</p>
+                        <p class="last-name">Dumont</p>
+                    </div>
+                    <p class="bodytxt1">SID:9876543</p>
+                    <p class="bodytxt1">they/them</p>
+                </div>
+            </div>
+            
+            <div class="btmsec">
+                <p class="bodytxt2">
+                    Graduate
+                </p>
+                <p class="bodytxt2">
+                    Integrated Design <span class="major">CAS</span>
+                </p>
+                <p class="bodytxt2">
+                    Available: Mon & Thurs (10am - 2pm)
+                </p>
+            <div class="statusbtn">
+                <p class="bodytxt3">
+                    Active
+                </p>
+                <div class="checkbox">
+                    <i class="gg-check"></i>
+                </div>
+            </div>
+            <div class="requestbtn">
+                <p class="bodytxt3">
+                    New Requests
+                </p>
+                <div class="pendingbx">
+                    <div class="pendingdot"></div>
+                    <div class="pendingdot"></div>
+                    <div class="pendingdot"></div>
+                </div>
+            </div>
+            </div>
+            <div class="profilefooter">
+                <p class="viewprofile">
+                    View Profile
+                <i class="gg-chevron-right"></i>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
